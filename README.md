@@ -12,7 +12,8 @@ options for drawing biplots in the **ggplot2** framework; `ggbiplot()`
 in the [**ordr** package](https://github.com/corybrunson/ordr) is an
 excellent choice. The main contributions of `draw_biplot()` are ease of
 use and option to calibrate only one of the axes. Calibration
-calculations are performed by `calibrate::calibrate()`.
+calculations are performed by `calibrate()` in the [**calibrate**
+package](https://cran.r-project.org/web/packages/calibrate/index.html).
 
 Currently, `draw_biplot()` takes a data frame, performs principal
 components analysis (PCA) on the numeric columns using `prcomp()` and
