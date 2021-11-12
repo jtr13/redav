@@ -1,6 +1,8 @@
 Joyce Robbins
 2021-11-12
 
+# redav
+
 This package will eventually contain functions, data, and templates to
 accompany data visualization courses.
 
