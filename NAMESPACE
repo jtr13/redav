@@ -3,3 +3,4 @@
 export("%>%")
 export(draw_biplot)
 importFrom(magrittr,"%>%")
+importFrom(rlang,.data)

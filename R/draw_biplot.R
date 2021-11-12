@@ -117,9 +117,9 @@ draw_biplot <- function(data,
     dplyr::mutate(label = label)
 
   dfarrows <- data.frame(xend = loadings[, 1], yend = loadings[, 2],
-                         label = rownames(loadings)) %>%
-    dplyr::mutate(angle = atan2(yend, xend) * 180 / pi - 90 * sign(xend) + 90) %>%
-    dplyr::mutate(highlight = ifelse(label == key_axis, TRUE, FALSE))
+                         label = rownames(loadings))
+  dfarrows$angle <- atan2(dfarrows$yend, dfarrows$xend) * 180 / pi - 90 * sign(dfarrows$xend) + 90
+  dfarrows$highlight <- ifelse(dfarrows$label == key_axis, TRUE, FALSE)
 
   if (key_axis != "none") {
     c <- calibrate::calibrate(g = loadings[key_axis, c("PC1", "PC2")],
@@ -139,8 +139,9 @@ draw_biplot <- function(data,
                          yend = c$M[nrow(c$M), 2])
 
     dfticks <- data.frame(c$M, c$Mn, ticklab) %>%
-      stats::setNames(c("x", "y", "xend", "yend", "label")) %>%
-      dplyr::mutate(label_x = 2 * xend - x, label_y = 2 * yend - y)
+      stats::setNames(c("x", "y", "xend", "yend", "label"))
+    dfticks$label_x <- 2 * dfticks$xend - dfticks$x
+    dfticks$label_y <- 2 * dfticks$yend - dfticks$y
   }
 
 
@@ -155,7 +156,7 @@ draw_biplot <- function(data,
 
   # points
   alpha <- ifelse(points, 1, 0)
-  g <- ggplot2::ggplot(dfpoints, ggplot2::aes(x = PC1, y = PC2)) +
+  g <- ggplot2::ggplot(dfpoints, ggplot2::aes(x = .data$PC1, y = .data$PC2)) +
     ggplot2::geom_point(color = point_color, alpha = alpha) +
     ggplot2::geom_text(ggplot2::aes(label = label), nudge_y = -.2, size = 3, color = point_color, alpha = alpha) +
     ggplot2::coord_fixed() +
@@ -169,12 +170,12 @@ draw_biplot <- function(data,
   if (arrows) {
   g <- g +
     ggplot2::geom_segment(data = dfarrows,
-                 ggplot2::aes(x = 0, y = 0, xend = xend * mult,
-                     yend = yend * mult, color = highlight),
+                 ggplot2::aes(x = 0, y = 0, xend = .data$xend * mult,
+                     yend = .data$yend * mult, color = .data$highlight),
                  arrow = grid::arrow(length = grid::unit(.03, "npc"))) +
     ggplot2::geom_text(data = dfarrows,
-              ggplot2::aes(x = xend * mult * 1.03, y = yend * mult * 1.03,
-                  label = label, angle = angle, color = highlight, hjust = -.5 * sign(xend) + .5), size = 3)
+              ggplot2::aes(x = .data$xend * mult * 1.03, y = .data$yend * mult * 1.03,
+                  label = label, angle = .data$angle, color = .data$highlight, hjust = -.5 * sign(.data$xend) + .5), size = 3)
   }
 
 
@@ -182,15 +183,15 @@ if (key_axis != "none") {
   # calibrated axis: axis, tick marks, tick mark labels
 
   g <- g +
-    ggplot2::geom_segment(data = dfaxis, ggplot2::aes(x = x, y = y, xend = xend, yend = yend), color = vector_colors[2]) +
-    ggplot2::geom_segment(data = dfticks, ggplot2::aes(x = x, y = y, xend = xend, yend = yend), color = vector_colors[2]) +
-    ggplot2::geom_text(data = dfticks, ggplot2::aes(x = label_x, y = label_y, label = label), color = vector_colors[2], size = 3)
+    ggplot2::geom_segment(data = dfaxis, ggplot2::aes(x = .data$x, y = .data$y, xend = .data$xend, yend = .data$yend), color = vector_colors[2]) +
+    ggplot2::geom_segment(data = dfticks, ggplot2::aes(x = .data$x, y = .data$y, xend = .data$xend, yend = .data$yend), color = vector_colors[2]) +
+    ggplot2::geom_text(data = dfticks, ggplot2::aes(x = .data$label_x, y = .data$label_y, label = label), color = vector_colors[2], size = 3)
 
   # projection lines
   if (project & points)
     g <- g +
-      ggplot2::geom_segment(data = dfpoints, ggplot2::aes(x = PC1, y = PC2,
-                  xend = xsdrop, yend = ysdrop), lty = "dashed",
+      ggplot2::geom_segment(data = dfpoints, ggplot2::aes(x = .data$PC1, y = .data$PC2,
+                  xend = .data$xsdrop, yend = .data$ysdrop), lty = "dashed",
                   col = point_color)
   }
 

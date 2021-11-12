@@ -14,5 +14,6 @@ Imports:
     dplyr,
     ggplot2,
     magrittr,
+    rlang,
     tibble,
     tidyselect
