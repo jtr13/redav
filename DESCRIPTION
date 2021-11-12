@@ -1,10 +1,9 @@
 Package: redav
-Title: What the Package Does (One Line, Title Case)
+Title: R for EDAV
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    person("Joyce", "Robbins", , "jtr13@columba.edu", role = c("aut", "cre"))
+Description: (Under development) Will provides functions, data, and templates to accompany data visualization courses.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -14,6 +13,4 @@ Imports:
     dplyr,
     ggplot2,
     magrittr,
-    rlang,
-    tibble,
-    tidyselect
+    rlang

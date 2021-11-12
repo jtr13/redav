@@ -31,9 +31,8 @@
 #'
 #' @examples
 #'
-#' swiss %>%
-#'   tibble::rownames_to_column() %>%
-#'     draw_biplot("Agriculture")
+#' swiss$country <- rownames(swiss)
+#' draw_biplot(swiss, key_axis = "Agriculture")
 #'
 #'
 #'

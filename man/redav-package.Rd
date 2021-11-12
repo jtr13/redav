@@ -4,12 +4,12 @@
 \name{redav-package}
 \alias{redav}
 \alias{redav-package}
-\title{redav: What the Package Does (One Line, Title Case)}
+\title{redav: R for EDAV}
 \description{
-What the package does (one paragraph).
+(Under development) Will provides functions, data, and templates to accompany data visualization courses.
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Joyce Robbins \email{jtr13@columba.edu}
 
 }
 \keyword{internal}
