@@ -1,0 +1,196 @@
+#' Easily perform PCA and draw a biplot of the results with a calibrated axis
+#'
+#' takes a data frame, performs PCA on the numeric columns, and draws a biplot with a clearly labeled calibrated axis for one of the original numeric columns. The first non-numeric column is used to label PC scores (points).
+#'
+#'
+#' @param data data.frame or object that can be coerced to one. PCA will be performed on numeric columns. The first non-numeric column will be used to label PC scores (points).
+#'
+#' @param key_axis character indicating the column name of the axis to calibrate. If none is specified, no axes will be calibrated.
+#'
+#' @param ticklab vector of values indicating axis breaks and tick labels for calibrated axis. If not specified, five evenly spaced round values will be chosen by \code{pretty()}. Ignored if \code{key_axis} is not specified.
+#'
+#' @param project logical indicating whether projection lines should be drawn from PC scores to PC vectors. Defaults to \code{TRUE}.
+#'
+#' @param scale logical passed to the \code{scale.} parameter of \code{prcomp()}. Defaults to \code{TRUE} (in contrast to \code{prcomp()}).
+#'
+#' @param fix_sign logical indicating whether the signs of the loadings and scores should be chosen so that the first element of each loading is non-negative. Defaults to \code{FALSE} (in contrast to \code{princomp()} from which this parameter name was borrowed. \code{prcomp()} does not have such an option.)
+#'
+#' @param points logical indicating whether to plot principal component scores. Defaults to \code{TRUE}.
+#'
+#' @param arrows logical indicating whether to plot principal component loading vectors. Defaults to \code{TRUE}.
+#'
+#' @param mult (NULL) numeric value used to scale the length of the rotation vectors, in effect creating secondary axes with different scales than the primary axes, although the secondary axes are not shown. If not specified, the factor is set to the ratio of 75th percentile distance between the scores and the origin to the length of the longest vector.
+#'
+#' @param colors = vector of two colors, the first for the non-calibrated vectors and the second for the calibrated axis (and vector). Defaults to \code{c("grey40", "red")}.
+
+#'
+#' @details
+#' This function was developed mainly for teaching and learning purposes. There are many options for drawing biplots. The main contributions of this one are ease of use and option to calibrate one of the axes. Calibration calculations are performed by \code{calibrate::calibrate()}.
+#'
+#' @examples
+#'
+#' swiss %>%
+#'   tibble::rownames_to_column() %>%
+#'     draw_biplot("Agriculture")
+#'
+#'
+#'
+#' @section References:
+#'
+#' (to be added)
+#' @export
+#'
+draw_biplot <- function(data,
+                        key_axis = "none",
+                        ticklab = NULL,
+                        project = TRUE,
+                        scale = TRUE,
+                        fix_sign = FALSE,
+                        points = TRUE,
+                        arrows = TRUE,
+                        mult = NULL,
+                        colors = c("grey40", "red")) {
+
+  df <- as.data.frame(data) %>%
+    dplyr::select(where(is.numeric))
+
+  label <- as.data.frame(data) %>%
+    dplyr::select(!where(is.numeric))
+
+  if (ncol(label) == 0) {
+    label <- 1:nrow(data)
+  } else {
+    label <- label[, 1, drop = TRUE]
+  }
+
+  if (key_axis != "none") {
+    if (is.character(key_axis) & !(key_axis %in% colnames(df))) {
+      message(paste(
+        "Column",
+        key_axis,
+        "doesn't exist, using",
+        colnames(df)[1],
+        "instead."
+      ))
+      key_axis <- colnames(df)[1]
+    } else if (is.numeric(key_axis) &
+               (key_axis < 1 | key_axis > ncol(df))) {
+      message(paste(
+        "Column",
+        key_axis,
+        "doesn't exist, using Column 1 instead."
+      ))
+      key_axis <- colnames(df)[1]
+    }
+  }
+
+  if (key_axis != "none") {
+    key_axis_col <- df[, key_axis, drop = TRUE]
+    if (is.null(ticklab))
+      ticklab <- pretty(key_axis_col)
+  }
+
+  pca <- stats::prcomp(df, scale. = scale)
+  loadings <- pca$rotation
+  # fix sign
+  if (fix_sign) {
+    for (i in 1:nrow(loadings)) {
+      if (loadings[1, i] < 0)
+        loadings[, i] <- loadings[, i] * -1
+    }
+    scores <- as.matrix(scale(df)) %*% loadings
+  } else {
+    scores <- pca$x
+  }
+
+  s <- summary(pca)
+  xlab <-
+    paste("PC 1 (", round(s$importance[2, 1] * 100, 1), "%)", sep = "")
+  ylab <-
+    paste("PC 2 (", round(s$importance[2, 2] * 100, 1), "%)", sep = "")
+
+  dfpoints <- data.frame(scores) %>%
+    dplyr::mutate(label = label)
+
+  dfarrows <- data.frame(xend = loadings[, 1], yend = loadings[, 2],
+                         label = rownames(loadings)) %>%
+    dplyr::mutate(angle = atan2(yend, xend) * 180 / pi - 90 * sign(xend) + 90) %>%
+    dplyr::mutate(highlight = ifelse(label == key_axis, TRUE, FALSE))
+
+  if (key_axis != "none") {
+    c <- calibrate::calibrate(g = loadings[key_axis, c("PC1", "PC2")],
+                   y = key_axis_col - mean(key_axis_col),
+                   tm = ticklab - mean(key_axis_col),
+                   Fr = scores[, c("PC1", "PC2")],  # matrix
+                   tmlab = ticklab,
+                   tl = .2,
+                   graphics = FALSE,
+                   verb = FALSE)
+
+    dfpoints <- dfpoints %>%
+      dplyr::mutate(xsdrop = c$Fpr[, 1], ysdrop = c$Fpr[, 2])
+
+    dfaxis <- data.frame(x = c$M[1, 1], y = c$M[1, 2],
+                         xend = c$M[nrow(c$M), 1],
+                         yend = c$M[nrow(c$M), 2])
+
+    dfticks <- data.frame(c$M, c$Mn, ticklab) %>%
+      stats::setNames(c("x", "y", "xend", "yend", "label")) %>%
+      dplyr::mutate(label_x = 2 * xend - x, label_y = 2 * yend - y)
+  }
+
+
+
+  # determine rotation vector multiplier if not provided (75th percentile of point distances from origin over longest rotation vector)
+
+  if (is.null(mult)) {
+    points_dist <- sqrt(dfpoints$PC1^2 + dfpoints$PC2^2)
+    arrows_length <- sqrt(dfarrows$xend^2 + dfarrows$yend^2)
+    mult <- stats::quantile(points_dist, probs = .75) / max(arrows_length)
+  }
+
+  # points
+  alpha <- ifelse(points, 1, 0)
+  g <- ggplot2::ggplot(dfpoints, ggplot2::aes(x = PC1, y = PC2)) +
+    ggplot2::geom_point(color = "cornflowerblue", alpha = alpha) +
+    ggplot2::geom_text(ggplot2::aes(label = label), nudge_y = -.2, size = 3, color = "cornflowerblue", alpha = alpha) +
+    ggplot2::coord_fixed() +
+    ggplot2::scale_x_continuous(expand = c(.1, .1)) +
+    ggplot2::scale_y_continuous(expand = c(.1, .1)) +
+    ggplot2::scale_color_manual(values = colors, guide = "none") +
+    ggplot2::labs(x = xlab, y = ylab) +
+    ggplot2::theme_grey(14)
+
+  # rotation vectors
+  if (arrows) {
+  g <- g +
+    ggplot2::geom_segment(data = dfarrows,
+                 ggplot2::aes(x = 0, y = 0, xend = xend * mult,
+                     yend = yend * mult, color = highlight),
+                 arrow = grid::arrow(length = grid::unit(.03, "npc"))) +
+    ggplot2::geom_text(data = dfarrows,
+              ggplot2::aes(x = xend * mult * 1.03, y = yend * mult * 1.03,
+                  label = label, angle = angle, color = highlight, hjust = -.5 * sign(xend) + .5), size = 3)
+  }
+
+
+if (key_axis != "none") {
+  # calibrated axis: axis, tick marks, tick mark labels
+
+  g <- g +
+    ggplot2::geom_segment(data = dfaxis, ggplot2::aes(x = x, y = y, xend = xend, yend = yend), color = colors[2]) +
+    ggplot2::geom_segment(data = dfticks, ggplot2::aes(x = x, y = y, xend = xend, yend = yend), color = colors[2]) +
+    ggplot2::geom_text(data = dfticks, ggplot2::aes(x = label_x, y = label_y, label = label), color = colors[2], size = 3)
+
+  # projection lines
+  if (project & points)
+    g <- g +
+      ggplot2::geom_segment(data = dfpoints, ggplot2::aes(x = PC1, y = PC2,
+                  xend = xsdrop, yend = ysdrop), lty = "dashed",
+                  col = "cornflowerblue")
+  }
+
+  g
+}
+
+utils::globalVariables("where")
