@@ -6,6 +6,10 @@ Joyce Robbins
 This package will eventually contain functions, data, and templates to
 accompany data visualization courses.
 
+If you encounter problems or have questions, please open an
+[issue](https://github.com/jtr13/redav/issues) or start/contribute to a
+[discussion](https://github.com/jtr13/redav/discussions).
+
 As of now, it contains one function: `draw_biplot()`. This function was
 developed mainly for teaching and learning purposes. There are other
 options for drawing biplots in the **ggplot2** framework; `ggbiplot()`
