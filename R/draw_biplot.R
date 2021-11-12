@@ -21,7 +21,9 @@
 #'
 #' @param mult (NULL) numeric value used to scale the length of the rotation vectors, in effect creating secondary axes with different scales than the primary axes, although the secondary axes are not shown. If not specified, the factor is set to the ratio of 75th percentile distance between the scores and the origin to the length of the longest vector.
 #'
-#' @param colors = vector of two colors, the first for the non-calibrated vectors and the second for the calibrated axis (and vector). Defaults to \code{c("grey40", "red")}.
+#' @param vector_colors = vector of two colors, the first for the non-calibrated vectors and the second for the calibrated axis (and vector). Defaults to \code{c("grey40", "red")}.
+#' 
+#' @param point_color = color for points and point labels. Defaults to \code{"cornflowerblue"}.
 
 #'
 #' @details
@@ -49,7 +51,9 @@ draw_biplot <- function(data,
                         points = TRUE,
                         arrows = TRUE,
                         mult = NULL,
-                        colors = c("grey40", "red")) {
+                        vector_colors = c("grey40", "red"),
+                        point_color = "cornflowerblue"
+                        ) {
 
   df <- as.data.frame(data) %>%
     dplyr::select(where(is.numeric))
@@ -152,12 +156,12 @@ draw_biplot <- function(data,
   # points
   alpha <- ifelse(points, 1, 0)
   g <- ggplot2::ggplot(dfpoints, ggplot2::aes(x = PC1, y = PC2)) +
-    ggplot2::geom_point(color = "cornflowerblue", alpha = alpha) +
-    ggplot2::geom_text(ggplot2::aes(label = label), nudge_y = -.2, size = 3, color = "cornflowerblue", alpha = alpha) +
+    ggplot2::geom_point(color = point_color, alpha = alpha) +
+    ggplot2::geom_text(ggplot2::aes(label = label), nudge_y = -.2, size = 3, color = point_color, alpha = alpha) +
     ggplot2::coord_fixed() +
     ggplot2::scale_x_continuous(expand = c(.1, .1)) +
     ggplot2::scale_y_continuous(expand = c(.1, .1)) +
-    ggplot2::scale_color_manual(values = colors, guide = "none") +
+    ggplot2::scale_color_manual(values = vector_colors, guide = "none") +
     ggplot2::labs(x = xlab, y = ylab) +
     ggplot2::theme_grey(14)
 
@@ -178,16 +182,16 @@ if (key_axis != "none") {
   # calibrated axis: axis, tick marks, tick mark labels
 
   g <- g +
-    ggplot2::geom_segment(data = dfaxis, ggplot2::aes(x = x, y = y, xend = xend, yend = yend), color = colors[2]) +
-    ggplot2::geom_segment(data = dfticks, ggplot2::aes(x = x, y = y, xend = xend, yend = yend), color = colors[2]) +
-    ggplot2::geom_text(data = dfticks, ggplot2::aes(x = label_x, y = label_y, label = label), color = colors[2], size = 3)
+    ggplot2::geom_segment(data = dfaxis, ggplot2::aes(x = x, y = y, xend = xend, yend = yend), color = vector_colors[2]) +
+    ggplot2::geom_segment(data = dfticks, ggplot2::aes(x = x, y = y, xend = xend, yend = yend), color = vector_colors[2]) +
+    ggplot2::geom_text(data = dfticks, ggplot2::aes(x = label_x, y = label_y, label = label), color = vector_colors[2], size = 3)
 
   # projection lines
   if (project & points)
     g <- g +
       ggplot2::geom_segment(data = dfpoints, ggplot2::aes(x = PC1, y = PC2,
                   xend = xsdrop, yend = ysdrop), lty = "dashed",
-                  col = "cornflowerblue")
+                  col = point_color)
   }
 
   g

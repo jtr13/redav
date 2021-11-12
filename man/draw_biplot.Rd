@@ -14,7 +14,8 @@ draw_biplot(
   points = TRUE,
   arrows = TRUE,
   mult = NULL,
-  colors = c("grey40", "red")
+  vector_colors = c("grey40", "red"),
+  point_color = "cornflowerblue"
 )
 }
 \arguments{
@@ -36,7 +37,9 @@ draw_biplot(
 
 \item{mult}{(NULL) numeric value used to scale the length of the rotation vectors, in effect creating secondary axes with different scales than the primary axes, although the secondary axes are not shown. If not specified, the factor is set to the ratio of 75th percentile distance between the scores and the origin to the length of the longest vector.}
 
-\item{colors}{= vector of two colors, the first for the non-calibrated vectors and the second for the calibrated axis (and vector). Defaults to \code{c("grey40", "red")}.}
+\item{vector_colors}{= vector of two colors, the first for the non-calibrated vectors and the second for the calibrated axis (and vector). Defaults to \code{c("grey40", "red")}.}
+
+\item{point_color}{= color for points and point labels. Defaults to \code{"cornflowerblue"}.}
 }
 \description{
 takes a data frame, performs PCA on the numeric columns, and draws a biplot with a clearly labeled calibrated axis for one of the original numeric columns. The first non-numeric column is used to label PC scores (points).
