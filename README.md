@@ -7,10 +7,12 @@ This package will eventually contain functions, data, and templates to
 accompany data visualization courses.
 
 As of now, it contains one function: `draw_biplot()`. This function was
-developed mainly for teaching and learning purposes. There are many
-options for drawing biplots. The main contributions of this one are ease
-of use and option to calibrate one of the axes. Calibration calculations
-are performed by .
+developed mainly for teaching and learning purposes. There are other
+options for drawing biplots in the **ggplot2** framework; `ggbiplot()`
+in the [**ordr** package](https://github.com/corybrunson/ordr) is an
+excellent choice. The main contributions of `draw_biplot()` are ease of
+use and option to calibrate only one of the axes. Calibration
+calculations are performed by `calibrate::calibrate()`.
 
 Currently, `draw_biplot()` takes a data frame, performs principal
 components analysis (PCA) on the numeric columns using `prcomp()` and
