@@ -2,5 +2,6 @@
 
 export("%>%")
 export(draw_biplot)
+export(plot_missing)
 importFrom(magrittr,"%>%")
 importFrom(rlang,.data)

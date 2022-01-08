@@ -11,6 +11,13 @@ RoxygenNote: 7.1.2
 Imports: 
     calibrate,
     dplyr,
+    forcats,
     ggplot2,
     magrittr,
-    rlang
+    patchwork,
+    rlang,
+    tibble,
+    tidyr
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
