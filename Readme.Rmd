@@ -1,12 +1,14 @@
 ---
 author: "Joyce Robbins"
 date: "`r Sys.Date()`"
-output: github_document
+output: 
+  github_document:
+    keep_html: true
 ---
 
 ```{r setup, include=FALSE}
 # DO NOT EDIT Readme.md, EDIT Readme.Rmd instead
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
 ```
 
 # redav
@@ -15,9 +17,13 @@ This package will eventually contain functions, data, and templates to accompany
 
 If you encounter problems or have questions, please open an [issue](https://github.com/jtr13/redav/issues) or start/contribute to a [discussion](https://github.com/jtr13/redav/discussions).
 
-As of now, it contains one function: `draw_biplot()`. This function was developed mainly for teaching and learning purposes. There are other options for drawing biplots in the **ggplot2** framework; `ggbiplot()` in the [**ordr** package](https://github.com/corybrunson/ordr) is an excellent choice. The main contributions of `draw_biplot()` are ease of use and option to calibrate only one of the axes. Calibration calculations are performed by `calibrate()` in the [**calibrate** package](https://cran.r-project.org/web/packages/calibrate/index.html).
+As of now, it contains two functions: `draw_biplot()` and `plot_missing()`. 
+
+There are other options for drawing biplots in the **ggplot2** framework; `ggbiplot()` in the [**ordr** package](https://github.com/corybrunson/ordr) is an excellent choice. The main contributions of `draw_biplot()` are ease of use and option to calibrate only one of the axes. Calibration calculations are performed by `calibrate()` in the [**calibrate** package](https://cran.r-project.org/web/packages/calibrate/index.html).
 
 Currently, `draw_biplot()` takes a data frame, performs principal components analysis (PCA) on the numeric columns using `prcomp()` and draws a biplot using the first non-numeric column as labels for the principal component scores (points). Additional options besides PCA may be added in the future. 
+
+`plot_missing()` was designed as a replacement for `extracat::visna()` which is no longer available on CRAN. It has improved labeling and the option to label axes as percents or numbers.
 
 ## Installation
 
@@ -28,6 +34,8 @@ remotes::install_github("jtr13/redav")
 ```
 
 ## Examples
+
+### `draw_biplot()`
 
 ```{r, fig.height=4, fig.width = 5, dev='svg'}
 library(redav)
@@ -44,3 +52,15 @@ draw_biplot(s77, mult = 1, point_color = "pink")
 draw_biplot(s77, points = FALSE)
 ```
 
+### `plot_missing()`
+
+```{r, fig.height=4, fig.width=7, dev='svg'}
+library(redav)
+data(CHAIN, package = "mi")
+plot_missing(CHAIN)
+plot_missing(CHAIN, percent = FALSE)
+plot_missing(mtcars)
+```
+
+
+*Rendered from* `Readme.Rmd`.

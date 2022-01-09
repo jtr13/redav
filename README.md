@@ -1,5 +1,5 @@
 Joyce Robbins
-2021-11-12
+2022-01-08
 
 # redav
 
@@ -10,13 +10,15 @@ If you encounter problems or have questions, please open an
 [issue](https://github.com/jtr13/redav/issues) or start/contribute to a
 [discussion](https://github.com/jtr13/redav/discussions).
 
-As of now, it contains one function: `draw_biplot()`. This function was
-developed mainly for teaching and learning purposes. There are other
-options for drawing biplots in the **ggplot2** framework; `ggbiplot()`
-in the [**ordr** package](https://github.com/corybrunson/ordr) is an
-excellent choice. The main contributions of `draw_biplot()` are ease of
-use and option to calibrate only one of the axes. Calibration
-calculations are performed by `calibrate()` in the [**calibrate**
+As of now, it contains two functions: `draw_biplot()` and
+`plot_missing()`.
+
+There are other options for drawing biplots in the **ggplot2**
+framework; `ggbiplot()` in the [**ordr**
+package](https://github.com/corybrunson/ordr) is an excellent choice.
+The main contributions of `draw_biplot()` are ease of use and option to
+calibrate only one of the axes. Calibration calculations are performed
+by `calibrate()` in the [**calibrate**
 package](https://cran.r-project.org/web/packages/calibrate/index.html).
 
 Currently, `draw_biplot()` takes a data frame, performs principal
@@ -24,6 +26,10 @@ components analysis (PCA) on the numeric columns using `prcomp()` and
 draws a biplot using the first non-numeric column as labels for the
 principal component scores (points). Additional options besides PCA may
 be added in the future.
+
+`plot_missing()` was designed as a replacement for `extracat::visna()`
+which is no longer available on CRAN. It has improved labeling and the
+option to label axes as percents or numbers.
 
 ## Installation
 
@@ -34,6 +40,8 @@ remotes::install_github("jtr13/redav")
 ```
 
 ## Examples
+
+### `draw_biplot()`
 
 ``` r
 library(redav)
@@ -76,3 +84,27 @@ draw_biplot(s77, points = FALSE)
 ```
 
 ![](Readme_files/figure-gfm/unnamed-chunk-2-6.svg)<!-- -->
+
+### `plot_missing()`
+
+``` r
+library(redav)
+data(CHAIN, package = "mi")
+plot_missing(CHAIN)
+```
+
+![](Readme_files/figure-gfm/unnamed-chunk-3-1.svg)<!-- -->
+
+``` r
+plot_missing(CHAIN, percent = FALSE)
+```
+
+![](Readme_files/figure-gfm/unnamed-chunk-3-2.svg)<!-- -->
+
+``` r
+plot_missing(mtcars)
+```
+
+![](Readme_files/figure-gfm/unnamed-chunk-3-3.svg)<!-- -->
+
+*Rendered from* `Readme.Rmd`.
