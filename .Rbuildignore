@@ -2,4 +2,5 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^Readme\.Rmd$
+^Readme\.html$
 ^Readme_files$
