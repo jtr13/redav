@@ -16,6 +16,8 @@
 #' @param fix_sign logical indicating whether the signs of the loadings and scores should be chosen so that the first element of each loading is non-negative. Defaults to \code{FALSE} (in contrast to \code{princomp()} from which this parameter name was borrowed. \code{prcomp()} does not have such an option.)
 #'
 #' @param points logical indicating whether to plot principal component scores. Defaults to \code{TRUE}.
+#' 
+#' @param point_labels logical indicating whether to plot point labels. Defaults to \code{TRUE}.
 #'
 #' @param arrows logical indicating whether to plot principal component loading vectors. Defaults to \code{TRUE}.
 #'
@@ -24,6 +26,8 @@
 #' @param vector_colors = vector of two colors, the first for the non-calibrated vectors and the second for the calibrated axis (and vector). Defaults to \code{c("grey40", "red")}.
 #' 
 #' @param point_color = color for points and point labels. Defaults to \code{"cornflowerblue"}.
+#' 
+#' @param point_size = point size. Defaults to `ggplot2` point size (`1.5`).
 
 #'
 #' @details
@@ -48,10 +52,12 @@ draw_biplot <- function(data,
                         scale = TRUE,
                         fix_sign = FALSE,
                         points = TRUE,
+                        point_labels = TRUE,
                         arrows = TRUE,
                         mult = NULL,
                         vector_colors = c("grey40", "red"),
-                        point_color = "cornflowerblue"
+                        point_color = "cornflowerblue",
+                        point_size = 1.5
                         ) {
 
   df <- as.data.frame(data) %>%
@@ -153,11 +159,18 @@ draw_biplot <- function(data,
     mult <- stats::quantile(points_dist, probs = .75) / max(arrows_length)
   }
 
-  # points
-  alpha <- ifelse(points, 1, 0)
+  # points and point labels
+  if (points) {
+    pointalpha <- 1
+    labelalpha <- ifelse(point_labels, 1, 0)
+  } else {
+    pointalpha <- 0
+    labelalpha <- 0
+  }
+
   g <- ggplot2::ggplot(dfpoints, ggplot2::aes(x = .data$PC1, y = .data$PC2)) +
-    ggplot2::geom_point(color = point_color, alpha = alpha) +
-    ggplot2::geom_text(ggplot2::aes(label = label), nudge_y = -.2, size = 3, color = point_color, alpha = alpha) +
+    ggplot2::geom_point(color = point_color, alpha = pointalpha, size = point_size) +
+    ggplot2::geom_text(ggplot2::aes(label = label), nudge_y = -.2, size = 3, color = point_color, alpha = labelalpha) +
     ggplot2::coord_fixed() +
     ggplot2::scale_x_continuous(expand = c(.1, .1)) +
     ggplot2::scale_y_continuous(expand = c(.1, .1)) +
