@@ -12,10 +12,12 @@ draw_biplot(
   scale = TRUE,
   fix_sign = FALSE,
   points = TRUE,
+  point_labels = TRUE,
   arrows = TRUE,
   mult = NULL,
   vector_colors = c("grey40", "red"),
-  point_color = "cornflowerblue"
+  point_color = "cornflowerblue",
+  point_size = 1.5
 )
 }
 \arguments{
@@ -33,6 +35,8 @@ draw_biplot(
 
 \item{points}{logical indicating whether to plot principal component scores. Defaults to \code{TRUE}.}
 
+\item{point_labels}{logical indicating whether to plot point labels. Defaults to \code{TRUE}.}
+
 \item{arrows}{logical indicating whether to plot principal component loading vectors. Defaults to \code{TRUE}.}
 
 \item{mult}{(NULL) numeric value used to scale the length of the rotation vectors, in effect creating secondary axes with different scales than the primary axes, although the secondary axes are not shown. If not specified, the factor is set to the ratio of 75th percentile distance between the scores and the origin to the length of the longest vector.}
@@ -40,6 +44,8 @@ draw_biplot(
 \item{vector_colors}{= vector of two colors, the first for the non-calibrated vectors and the second for the calibrated axis (and vector). Defaults to \code{c("grey40", "red")}.}
 
 \item{point_color}{= color for points and point labels. Defaults to \code{"cornflowerblue"}.}
+
+\item{point_size}{= point size. Defaults to \code{ggplot2} point size (\code{1.5}).}
 }
 \description{
 takes a data frame, performs PCA on the numeric columns, and draws a biplot with a clearly labeled calibrated axis for one of the original numeric columns. The first non-numeric column is used to label PC scores (points).
