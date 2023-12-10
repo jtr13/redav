@@ -67,6 +67,7 @@ plot_missing(CHAIN, percent = FALSE)
 plot_missing(CHAIN, max_rows = 4)
 plot_missing(CHAIN, max_cols = 3)
 plot_missing(CHAIN, num_char = 5)
+plot_missing(CHAIN, max_rows = 4, max_cols = 3, num_char = 5, percent = FALSE)
 plot_missing(mtcars)
 ```
 

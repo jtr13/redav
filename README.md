@@ -119,9 +119,15 @@ plot_missing(CHAIN, num_char = 5)
 ![](Readme_files/figure-gfm/unnamed-chunk-4-5.svg)<!-- -->
 
 ``` r
-plot_missing(mtcars)
+plot_missing(CHAIN, max_rows = 4, max_cols = 3, num_char = 5, percent = FALSE)
 ```
 
 ![](Readme_files/figure-gfm/unnamed-chunk-4-6.svg)<!-- -->
+
+``` r
+plot_missing(mtcars)
+```
+
+![](Readme_files/figure-gfm/unnamed-chunk-4-7.svg)<!-- -->
 
 *Rendered from* `Readme.Rmd`.
