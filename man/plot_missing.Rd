@@ -4,12 +4,24 @@
 \alias{plot_missing}
 \title{Create a missing value plot in the style of \code{extracat::visna()} (no longer available on CRAN)}
 \usage{
-plot_missing(x, percent = TRUE)
+plot_missing(
+  x,
+  percent = TRUE,
+  num_char = 100,
+  max_rows = NULL,
+  max_cols = NULL
+)
 }
 \arguments{
 \item{x}{data.frame or object that can be coerced to one}
 
 \item{percent}{logical if \code{TRUE}, \% of rows and columns are shown, if \code{FALSE}, actual numbers of rows and columns are shown (defaults to \code{TRUE})}
+
+\item{num_char}{numeric number of characters per column name (to prevent overlapping labels), uses base R \code{abbreviate()} to shorten. Note that this value will not be adhered to if doing so creates duplicate column names.}
+
+\item{max_rows}{numeric maximum number of rows (missing patterns) to display}
+
+\item{max_cols}{numeric maxium number of columns to display}
 }
 \description{
 Create a missing value plot in the style of \code{extracat::visna()} (no longer available on CRAN)
