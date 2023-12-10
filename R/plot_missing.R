@@ -66,7 +66,7 @@ plot_missing <- function(x, percent = TRUE, num_char = 100,
     ggplot2::scale_alpha_manual(values = c(.7, 1)) +	
     ggplot2::labs(y = "missing pattern",
                   caption = paste0("These missing patterns represent ",
-                                   round(perc_shown, 1), "% of the data.")) +	
+                                   round(perc_shown, 1), "% of the rows.")) +	
     ggplot2::guides(fill = "none", alpha = "none") +	
     ggplot2::theme_classic(12)
   
