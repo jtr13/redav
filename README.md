@@ -1,14 +1,7 @@
 Joyce Robbins
-2023-12-10
+2024-01-17
 
 # redav
-
-**This version adds `num_char`, `max_rows` and `max_cols` parameters to
-`plot_missing()`. To install use:**
-
-``` r
-remotes::install_github("jtr13/redav", ref = "limit")
-```
 
 This package will eventually contain functions, data, and templates to
 accompany data visualization courses.
