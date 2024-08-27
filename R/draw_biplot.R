@@ -186,8 +186,12 @@ draw_biplot <- function(data,
                      yend = .data$yend * mult, color = .data$highlight),
                  arrow = grid::arrow(length = grid::unit(.03, "npc"))) +
     ggplot2::geom_text(data = dfarrows,
-              ggplot2::aes(x = .data$xend * mult * 1.03, y = .data$yend * mult * 1.03,
-                  label = label, angle = .data$angle, color = .data$highlight, hjust = -.5 * sign(.data$xend) + .5), size = 3)
+              ggplot2::aes(x = .data$xend * mult * 1.03,
+                           y = .data$yend * mult * 1.03,
+                  label = label, angle = .data$angle,
+                  color = .data$highlight, size = as.integer(.data$highlight),
+                  hjust = -.5 * sign(.data$xend) + .5)) +
+    ggplot2::scale_size(range = c(3, 4), guide = "none")
   }
 
 
