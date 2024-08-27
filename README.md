@@ -1,5 +1,5 @@
 Joyce Robbins
-2024-01-17
+2024-08-27
 
 # redav
 
@@ -37,18 +37,25 @@ option to label axes as percents or numbers.
 
 ``` r
 library(redav)
+swiss$country <- rownames(swiss)
+draw_biplot(swiss)
+```
+
+![](Readme_files/figure-gfm/unnamed-chunk-2-1.svg)<!-- -->
+
+``` r
 draw_biplot(attitude)
 ```
 
-![](Readme_files/figure-gfm/unnamed-chunk-3-1.svg)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-2-2.svg)<!-- -->
 
 ``` r
 draw_biplot(attitude, key_axis = "raises") + 
-  ggplot2::ggtitle("The Chatterjee-Price Attitude Data", 
-          sub = "package: datasets (base R)")
+  labs(title = "The Chatterjee-Price Attitude Data",
+       subtitle = "package: datasets (base R)")
 ```
 
-![](Readme_files/figure-gfm/unnamed-chunk-3-2.svg)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-2-3.svg)<!-- -->
 
 ``` r
 s77 <- as.data.frame(state.x77)
@@ -56,26 +63,26 @@ s77$state_name <- rownames(s77)
 draw_biplot(s77)
 ```
 
-![](Readme_files/figure-gfm/unnamed-chunk-3-3.svg)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-2-4.svg)<!-- -->
 
 ``` r
 draw_biplot(s77, key_axis = "Murder", ticklab = 0:16, project = FALSE,
-            point_color="lightblue") + ggplot2::theme_classic()
+            point_color="deepskyblue3") + theme_classic()
 ```
 
-![](Readme_files/figure-gfm/unnamed-chunk-3-4.svg)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-2-5.svg)<!-- -->
 
 ``` r
-draw_biplot(s77, mult = 1, point_color = "pink")
+draw_biplot(s77, mult = 1)
 ```
 
-![](Readme_files/figure-gfm/unnamed-chunk-3-5.svg)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-2-6.svg)<!-- -->
 
 ``` r
 draw_biplot(s77, points = FALSE)
 ```
 
-![](Readme_files/figure-gfm/unnamed-chunk-3-6.svg)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-2-7.svg)<!-- -->
 
 ### `plot_missing()`
 
@@ -85,42 +92,42 @@ data(CHAIN, package = "mi")
 plot_missing(CHAIN)
 ```
 
-![](Readme_files/figure-gfm/unnamed-chunk-4-1.svg)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-3-1.svg)<!-- -->
 
 ``` r
 plot_missing(CHAIN, percent = FALSE)
 ```
 
-![](Readme_files/figure-gfm/unnamed-chunk-4-2.svg)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-3-2.svg)<!-- -->
 
 ``` r
 plot_missing(CHAIN, max_rows = 4)
 ```
 
-![](Readme_files/figure-gfm/unnamed-chunk-4-3.svg)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-3-3.svg)<!-- -->
 
 ``` r
 plot_missing(CHAIN, max_cols = 3)
 ```
 
-![](Readme_files/figure-gfm/unnamed-chunk-4-4.svg)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-3-4.svg)<!-- -->
 
 ``` r
 plot_missing(CHAIN, num_char = 5)
 ```
 
-![](Readme_files/figure-gfm/unnamed-chunk-4-5.svg)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-3-5.svg)<!-- -->
 
 ``` r
 plot_missing(CHAIN, max_rows = 4, max_cols = 3, num_char = 5, percent = FALSE)
 ```
 
-![](Readme_files/figure-gfm/unnamed-chunk-4-6.svg)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-3-6.svg)<!-- -->
 
 ``` r
 plot_missing(mtcars)
 ```
 
-![](Readme_files/figure-gfm/unnamed-chunk-4-7.svg)<!-- -->
+![](Readme_files/figure-gfm/unnamed-chunk-3-7.svg)<!-- -->
 
 *Rendered from* `Readme.Rmd`.

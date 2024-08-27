@@ -23,11 +23,11 @@
 #'
 #' @param mult (NULL) numeric value used to scale the length of the rotation vectors, in effect creating secondary axes with different scales than the primary axes, although the secondary axes are not shown. If not specified, the factor is set to the ratio of 75th percentile distance between the scores and the origin to the length of the longest vector.
 #'
-#' @param vector_colors = vector of two colors, the first for the non-calibrated vectors and the second for the calibrated axis (and vector). Defaults to \code{c("grey40", "red")}.
+#' @param vector_colors = vector of two colors, the first for the non-calibrated vectors and the second for the calibrated axis (and vector). Defaults to \code{c("deepskyblue3", "brown2")}.
 #' 
-#' @param point_color = color for points and point labels. Defaults to \code{"cornflowerblue"}.
+#' @param point_color = color for points and point labels. Defaults to \code{"grey60"}.
 #' 
-#' @param point_size = point size. Defaults to `ggplot2` point size (`1.5`).
+#' @param point_size = point size. Defaults to \code{"1.25"}.
 
 #'
 #' @details
@@ -55,9 +55,9 @@ draw_biplot <- function(data,
                         point_labels = TRUE,
                         arrows = TRUE,
                         mult = NULL,
-                        vector_colors = c("grey40", "red"),
-                        point_color = "cornflowerblue",
-                        point_size = 1.5
+                        vector_colors = c("deepskyblue3", "brown2"),
+                        point_color = "grey60",
+                        point_size = 1.25
                         ) {
 
   df <- as.data.frame(data) %>%
@@ -170,13 +170,14 @@ draw_biplot <- function(data,
 
   g <- ggplot2::ggplot(dfpoints, ggplot2::aes(x = .data$PC1, y = .data$PC2)) +
     ggplot2::geom_point(color = point_color, alpha = pointalpha, size = point_size) +
-    ggplot2::geom_text(ggplot2::aes(label = label), nudge_y = -.2, size = 3, color = point_color, alpha = labelalpha) +
+    ggrepel::geom_text_repel(ggplot2::aes(label = label), size = 2.75,
+                             color = point_color, alpha = labelalpha) +
     ggplot2::coord_fixed() +
     ggplot2::scale_x_continuous(expand = c(.1, .1)) +
     ggplot2::scale_y_continuous(expand = c(.1, .1)) +
     ggplot2::scale_color_manual(values = vector_colors, guide = "none") +
     ggplot2::labs(x = xlab, y = ylab) +
-    ggplot2::theme_grey(14)
+    ggplot2::theme_bw(14)
 
   # rotation vectors
   if (arrows) {
@@ -199,15 +200,26 @@ if (key_axis != "none") {
   # calibrated axis: axis, tick marks, tick mark labels
 
   g <- g +
-    ggplot2::geom_segment(data = dfaxis, ggplot2::aes(x = .data$x, y = .data$y, xend = .data$xend, yend = .data$yend), color = vector_colors[2]) +
-    ggplot2::geom_segment(data = dfticks, ggplot2::aes(x = .data$x, y = .data$y, xend = .data$xend, yend = .data$yend), color = vector_colors[2]) +
-    ggplot2::geom_text(data = dfticks, ggplot2::aes(x = .data$label_x, y = .data$label_y, label = label), color = vector_colors[2], size = 3)
+    ggplot2::geom_segment(data = dfaxis,
+                          ggplot2::aes(x = .data$x, y = .data$y,
+                                       xend = .data$xend, yend = .data$yend),
+                          color = vector_colors[2],
+                          linewidth = .2) +
+    ggplot2::geom_segment(data = dfticks,
+                          ggplot2::aes(x = .data$x, y = .data$y,
+                                       xend = .data$xend, yend = .data$yend),
+                          color = vector_colors[2]) +
+    ggplot2::geom_text(data = dfticks,
+                       ggplot2::aes(x = .data$label_x, y = .data$label_y,
+                                    label = label),
+                       color = vector_colors[2], size = 3)
 
   # projection lines
   if (project & points)
     g <- g +
       ggplot2::geom_segment(data = dfpoints, ggplot2::aes(x = .data$PC1, y = .data$PC2,
-                  xend = .data$xsdrop, yend = .data$ysdrop), lty = "dashed",
+                  xend = .data$xsdrop, yend = .data$ysdrop), linetype = "dashed",
+                  linewidth = .25,
                   col = point_color)
   }
 
