@@ -46,6 +46,8 @@ draw_biplot(
 \item{point_color}{= color for points and point labels. Defaults to \code{"grey60"}.}
 
 \item{point_size}{= point size. Defaults to \code{"1.25"}.}
+
+\item{label_size}{= label size. Defaults to \code{"2.75"}.}
 }
 \description{
 takes a data frame, performs PCA on the numeric columns, and draws a biplot with a clearly labeled calibrated axis for one of the original numeric columns. The first non-numeric column is used to label PC scores (points).

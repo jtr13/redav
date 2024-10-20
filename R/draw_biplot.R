@@ -28,6 +28,8 @@
 #' @param point_color = color for points and point labels. Defaults to \code{"grey60"}.
 #' 
 #' @param point_size = point size. Defaults to \code{"1.25"}.
+#' 
+#' @param label_size = label size. Defaults to \code{"2.75"}.
 
 #'
 #' @details
@@ -170,7 +172,7 @@ draw_biplot <- function(data,
 
   g <- ggplot2::ggplot(dfpoints, ggplot2::aes(x = .data$PC1, y = .data$PC2)) +
     ggplot2::geom_point(color = point_color, alpha = pointalpha, size = point_size) +
-    ggrepel::geom_text_repel(ggplot2::aes(label = label), size = 2.75,
+    ggrepel::geom_text_repel(ggplot2::aes(label = label), size = label_size,
                              color = point_color, alpha = labelalpha) +
   #  ggplot2::coord_fixed() +
     ggplot2::scale_x_continuous(expand = c(.1, .1)) +
