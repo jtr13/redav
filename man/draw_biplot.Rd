@@ -17,7 +17,8 @@ draw_biplot(
   mult = NULL,
   vector_colors = c("deepskyblue3", "brown2"),
   point_color = "grey60",
-  point_size = 1.25
+  point_size = 1.25,
+  label_size = 2.75
 )
 }
 \arguments{
