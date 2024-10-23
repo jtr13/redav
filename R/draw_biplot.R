@@ -175,7 +175,7 @@ draw_biplot <- function(data,
     ggplot2::geom_point(color = point_color, alpha = pointalpha, size = point_size) +
     ggrepel::geom_text_repel(ggplot2::aes(label = label), size = label_size,
                              color = point_color, alpha = labelalpha) +
-  #  ggplot2::coord_fixed() +
+    ggplot2::coord_fixed() +
     ggplot2::scale_x_continuous(expand = c(.1, .1)) +
     ggplot2::scale_y_continuous(expand = c(.1, .1)) +
     ggplot2::scale_color_manual(values = vector_colors, guide = "none") +
