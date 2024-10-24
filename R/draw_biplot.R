@@ -25,7 +25,7 @@
 #'
 #' @param vector_colors = vector of two colors, the first for the non-calibrated vectors and the second for the calibrated axis (and vector). Defaults to \code{c("deepskyblue3", "brown2")}.
 #' 
-#' @param point_color = color for points and point labels. Defaults to \code{"grey60"}.
+#' @param point_color = color for points and point labels. Defaults to \code{"grey40"}.
 #' 
 #' @param point_size = point size. Defaults to \code{"1.25"}.
 #' 
@@ -58,7 +58,7 @@ draw_biplot <- function(data,
                         arrows = TRUE,
                         mult = NULL,
                         vector_colors = c("deepskyblue3", "brown2"),
-                        point_color = "grey60",
+                        point_color = "grey40",
                         point_size = 1.25,
                         label_size = 2.75
                         ) {
