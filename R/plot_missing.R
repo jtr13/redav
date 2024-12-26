@@ -14,7 +14,8 @@
 #' @export
 #'
 plot_missing <- function(x, percent = TRUE, num_char = 100, 
-                         max_rows = NULL, max_cols = NULL) {	
+                         max_rows = NULL, max_cols = NULL,
+                         long_name_cols= NULL) {	
 
   na_count_all <- data.frame(is.na(x)) %>%	
     dplyr::group_by_all() %>%	
@@ -120,6 +121,17 @@ plot_missing <- function(x, percent = TRUE, num_char = 100,
       ggplot2::scale_y_continuous(expand = c(0, 0), n.breaks = 5,
                          limits = c(0, 100))	
   }	
+  
+  # Rotates the x-axis labels for both the Main and Top charts to 45 degrees to better display columns with long names.
+  # For the Top chart, moves the x-axis from the bottom to the top.
+  if (!is.null(long_name_cols) && long_name_cols==TRUE ) {
+    main_plot <- main_plot +
+      ggplot2::theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    
+    missing_by_column_plot <- missing_by_column_plot +
+      ggplot2::theme(axis.text.x = element_text(angle = 45, hjust = 0)) +
+      ggplot2::scale_x_discrete(position = "top")
+  }
   
   missing_by_column_plot + patchwork::plot_spacer() + 	
     main_plot + missing_by_pattern_plot + 	
