@@ -86,40 +86,40 @@ plot_missing <- function(x, percent = TRUE, num_char = 100,
   
   denom <- ifelse(percent, nrow(x)/100, 1)
   
+  if (percent) {
+    margin_scale_y <- ggplot2::scale_y_continuous(expand = c(0, 0), n.breaks = 5,
+                                           limits = c(0, 100))
+    } else {
+    margin_scale_y <- ggplot2::scale_y_continuous(expand = c(0, 0), n.breaks = 3)
+    }
+  
   # top
   missing_by_column_plot <- 
     na_count_by_column %>% 
     dplyr::mutate(var = abbreviate(var, num_char)) %>% 
     ggplot2::ggplot(ggplot2::aes(forcats::fct_inorder(.data$var), .data$count/denom)) +	
     ggplot2::geom_col(fill = "cornflowerblue", alpha = .7) +
-    ggplot2::scale_y_continuous(expand = c(0, 0), n.breaks = 3) +	
+    margin_scale_y + 
     ggplot2::labs(x = "",
                   y = ifelse(percent, "% rows \n missing:", "num rows \n missing:")) +	
     ggplot2::theme_linedraw(12) + 	
     ggplot2::theme(panel.grid.major.x = ggplot2::element_blank(),	
           panel.grid.minor.x = ggplot2::element_blank(),
           )	
+
+  
   # right
   missing_by_pattern_plot <- 
     ggplot2::ggplot(na_count_by_pattern, ggplot2::aes(.data$pattern, .data$count/denom, alpha = .data$none_missing)) +
     ggplot2::geom_col(fill = "cornflowerblue") +
     ggplot2::coord_flip() +
-    ggplot2::scale_y_continuous(expand = c(0, 0), n.breaks = 3) +
+    margin_scale_y + 
     ggplot2::scale_alpha_manual(values = c(.7, 1)) +
     ggplot2::labs(x = "", y = ifelse(percent, "% rows", "row count")) +
     ggplot2::guides(alpha = "none") +
     ggplot2::theme_linedraw(12) +
     ggplot2::theme(panel.grid.major.y = ggplot2::element_blank(), 
           panel.grid.minor.y = ggplot2::element_blank())
-  
-  if (percent) {	
-    missing_by_column_plot <- missing_by_column_plot +
-      ggplot2::scale_y_continuous(expand = c(0, 0), n.breaks = 5,
-                         limits = c(0, 100))	
-    missing_by_pattern_plot <- missing_by_pattern_plot +
-      ggplot2::scale_y_continuous(expand = c(0, 0), n.breaks = 5,
-                         limits = c(0, 100))	
-  }	
   
   missing_by_column_plot + patchwork::plot_spacer() + 	
     main_plot + missing_by_pattern_plot + 	
