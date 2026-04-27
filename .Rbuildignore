@@ -4,3 +4,5 @@
 ^Readme\.Rmd$
 ^Readme\.html$
 ^Readme_files$
+^\.positai$
+^\.claude$
